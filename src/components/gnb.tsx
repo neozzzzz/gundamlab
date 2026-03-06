@@ -9,7 +9,7 @@ import { AuthButton } from './auth-button'
 export function GNB() {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
-  const { user } = useAuth()
+  const { user, isAdmin } = useAuth()
 
   // admin 페이지에서는 GNB 숨김
   if (pathname?.startsWith('/admin')) return null
@@ -44,7 +44,12 @@ export function GNB() {
               </Link>
             ))}
           </div>
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-4">
+            {isAdmin && (
+              <Link href="/admin" className="text-sm text-blue-400 hover:text-blue-300 transition-colors font-medium">
+                관리자
+              </Link>
+            )}
             <AuthButton />
           </div>
 
@@ -93,6 +98,11 @@ export function GNB() {
                   {label}
                 </Link>
               ))}
+              {isAdmin && (
+                <Link href="/admin" onClick={() => setMenuOpen(false)} className="text-sm text-blue-400 hover:text-blue-300 font-medium">
+                  관리자
+                </Link>
+              )}
             </div>
             <AuthButton />
           </nav>

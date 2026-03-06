@@ -45,11 +45,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // 초기 세션 확인
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       const nextUser = session?.user ?? null
       setUser(nextUser)
-      await loadAdminRole(nextUser?.id)
       setLoading(false)
+      loadAdminRole(nextUser?.id)
     })
 
     // 인증 상태 변경 감지
