@@ -168,13 +168,7 @@ export default function HomePage() {
               이 사이트는 비공식 팬 프로젝트입니다. 모든 건담 관련 저작권은 BANDAI NAMCO에 있습니다.
             </p>
           </div>
-          {isAdmin && (
-            <div className="mt-4 pt-3 border-t border-zinc-800 text-center">
-              <a href="/admin" className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors">
-                관리자 대시보드 →
-              </a>
-            </div>
-          )}
+
         </div>
       </footer>
 

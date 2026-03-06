@@ -3,11 +3,12 @@
 
 'use client'
 
+import Link from 'next/link'
 import { useAuth } from '@/lib/auth/auth-context'
 import { useState } from 'react'
 
 export function AuthButton() {
-  const { user, loading, signInWithGoogle, signOut } = useAuth()
+  const { user, loading, isAdmin, signInWithGoogle, signOut } = useAuth()
   const [isSigningIn, setIsSigningIn] = useState(false)
   const [isSigningOut, setIsSigningOut] = useState(false)
 
@@ -58,6 +59,11 @@ export function AuthButton() {
           <span className="text-sm text-foreground">
             {user.user_metadata?.name || user.email}
           </span>
+          {isAdmin && (
+            <Link href="/admin" className="px-3 py-1 text-xs font-medium bg-blue-600 hover:bg-blue-500 text-white rounded-full transition-colors">
+              Dashboard
+            </Link>
+          )}
         </div>
 
         {/* 로그아웃 버튼 */}
