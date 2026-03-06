@@ -49,7 +49,7 @@ export function AuthButton() {
       <div className="flex items-center gap-3">
         {/* Dashboard 버튼 (관리자만) */}
         {isAdmin && (
-          <Link href="/admin" className="hidden sm:inline-flex px-3 py-1 text-xs font-medium bg-blue-600 hover:bg-blue-500 text-white rounded-full transition-colors">
+          <Link href="/admin" className="hidden sm:inline-flex px-3 py-1 text-xs font-medium bg-blue-800 hover:bg-blue-700 text-white rounded-full transition-colors">
             Dashboard
           </Link>
         )}
