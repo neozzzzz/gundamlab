@@ -25,15 +25,8 @@ export default function AddFaction() {
   })
 
   useEffect(() => {
-    checkAuth()
   }, [])
 
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session || session.user.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
-      router.push('/admin/login')
-    }
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

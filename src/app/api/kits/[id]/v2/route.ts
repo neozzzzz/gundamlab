@@ -11,9 +11,6 @@ export async function GET(
     const supabase = await createClient()
     const { id } = await params
     
-    console.log('[V2 API] ========== START ==========')
-    console.log('[V2 API] Kit ID:', id)
-    
     // Step 1: 먼저 킷만 가져오기 (JOIN 없이)
     const { data: kitOnly, error: kitError } = await supabase
       .from('gundam_kits')
@@ -24,7 +21,7 @@ export async function GET(
     if (kitError) {
       console.error('Kit fetch error:', kitError)
       return NextResponse.json(
-        { error: 'Kit not found', details: kitError },
+        { error: 'Kit not found' },
         { status: 404 }
       )
     }
@@ -35,9 +32,6 @@ export async function GET(
         { status: 404 }
       )
     }
-
-    console.log('[V2 API] Kit found:', kitOnly.name_ko)
-    console.log('[V2 API] mobile_suit_id:', kitOnly.mobile_suit_id)
 
     // Step 2: grade 정보 가져오기
     let gradeData = null
@@ -101,8 +95,8 @@ export async function GET(
         }
 
         // V1.9: ms_organizations 테이블을 통해 제조사/운용 조직 정보 가져오기
-        let manufacturerData = null
-        let operatorData = null
+        let manufacturerData: any = null
+        let operatorData: any = null
         
         const { data: msOrgs } = await supabase
           .from('ms_organizations')
@@ -125,7 +119,7 @@ export async function GET(
         }
 
         // V1.9: org_faction_memberships를 통해 진영 정보 가져오기
-        let factionData = null
+        let factionData: any = null
         if (operatorData) {
           const { data: factionMembership } = await supabase
             .from('org_faction_memberships')
@@ -210,10 +204,6 @@ export async function GET(
     // ==========================================
     let sameMsKitsData: any[] = []
     
-    console.log('[V2 API] ===== SAME MS KITS QUERY =====')
-    console.log('[V2 API] Looking for kits with mobile_suit_id:', kitOnly.mobile_suit_id)
-    console.log('[V2 API] Excluding current kit id:', id)
-    
     if (kitOnly.mobile_suit_id) {
       const { data: sameMsKits, error: sameMsError } = await supabase
         .from('gundam_kits')
@@ -226,10 +216,10 @@ export async function GET(
         .is('deleted_at', null)
         .order('release_date', { ascending: false })
         .limit(10)
-      
-      console.log('[V2 API] Query error:', sameMsError)
-      console.log('[V2 API] Query result count:', sameMsKits?.length || 0)
-      console.log('[V2 API] Query result:', JSON.stringify(sameMsKits, null, 2))
+
+      if (sameMsError) {
+        console.error('Same mobile suit kits query error:', sameMsError)
+      }
       
       if (sameMsKits && sameMsKits.length > 0) {
         sameMsKitsData = sameMsKits.map(kit => ({
@@ -237,12 +227,7 @@ export async function GET(
           relation_type: 'same_mobile_suit',
           grade: { code: kit.grade_id }  // grade_id를 grade.code로 매핑
         }))
-        console.log('[V2 API] Mapped sameMsKitsData:', sameMsKitsData.length, 'items')
-      } else {
-        console.log('[V2 API] No same MS kits found')
       }
-    } else {
-      console.log('[V2 API] Kit has no mobile_suit_id, skipping same MS query')
     }
 
     // 관련 킷 합치기 (기존 + 같은 MS)
@@ -251,11 +236,6 @@ export async function GET(
     const uniqueSameMsKits = sameMsKitsData.filter(k => !existingIds.has(k.id))
     const combinedRelatedKits = [...relatedKitsData, ...uniqueSameMsKits]
     
-    console.log('[V2 API] relatedKitsData count:', relatedKitsData.length)
-    console.log('[V2 API] uniqueSameMsKits count:', uniqueSameMsKits.length)
-    console.log('[V2 API] combinedRelatedKits count:', combinedRelatedKits.length)
-    console.log('[V2 API] ========== END ==========')
-
     // 최종 결과 조합
     const result = {
       ...kitOnly,
@@ -274,7 +254,7 @@ export async function GET(
   } catch (error) {
     console.error('Kit detail API v2 error:', error)
     return NextResponse.json(
-      { error: 'Internal server error', details: error },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }

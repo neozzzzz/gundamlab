@@ -47,19 +47,12 @@ export default function EditMobileSuit() {
 
   useEffect(() => {
     const init = async () => {
-      await checkAuth()
       await loadData()
       if (msId) await loadMobileSuit()
     }
     init()
   }, [msId])
 
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session || session.user.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
-      router.push('/admin/login')
-    }
-  }
 
   const loadData = async () => {
     try {

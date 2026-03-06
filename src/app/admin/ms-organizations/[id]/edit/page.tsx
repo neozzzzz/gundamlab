@@ -43,16 +43,9 @@ export default function EditMsOrganizationPage() {
   })
 
   useEffect(() => {
-    checkAuth()
     fetchData()
   }, [id])
 
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session || session.user.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
-      router.push('/admin/login')
-    }
-  }
 
   const fetchData = async () => {
     const { data: orgsData } = await supabase.from('organizations').select('id, name_ko').order('name_ko')

@@ -7,7 +7,7 @@ import type { Database } from './database'
 export type Timeline = Database['public']['Tables']['timelines']['Row']
 export type Series = Database['public']['Tables']['series']['Row']
 export type Grade = Database['public']['Tables']['grades']['Row']
-export type Brand = Database['public']['Tables']['brands']['Row']
+export type Brand = any
 export type MobileSuit = Database['public']['Tables']['mobile_suits']['Row']
 export type GundamKit = Database['public']['Tables']['gundam_kits']['Row']
 export type KitImage = Database['public']['Tables']['kit_images']['Row']
@@ -20,7 +20,8 @@ export type UserActivity = Database['public']['Tables']['user_activities']['Row'
 export type LimitedType = Database['public']['Tables']['limited_types']['Row']
 
 // 조인된 데이터 타입
-export interface KitWithDetails extends GundamKit {
+export interface KitWithDetails {
+  [key: string]: any
   grade: Grade | null
   brand: Brand | null
   series: Series | null
@@ -30,7 +31,8 @@ export interface KitWithDetails extends GundamKit {
   purchase_links: (PurchaseLink & { store: Store | null })[]
 }
 
-export interface KitListItem extends GundamKit {
+export interface KitListItem {
+  [key: string]: any
   grade: Grade | null
   brand: Brand | null
   series: Series | null

@@ -34,19 +34,12 @@ export default function EditOrganizationPage() {
   })
 
   useEffect(() => {
-    checkAuth()
     if (id) {
       fetchOrganization()
       fetchParentOrgs()
     }
   }, [id])
 
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session || session.user.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
-      router.push('/admin/login')
-    }
-  }
 
   const fetchOrganization = async () => {
     const { data, error } = await supabase.from('organizations').select('*').eq('id', id).single()

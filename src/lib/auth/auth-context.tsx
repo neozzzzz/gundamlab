@@ -3,7 +3,7 @@
 
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 
@@ -19,32 +19,50 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
-  // 관리자 여부 계산 (환경변수 미설정 시 false 반환)
-  const isAdmin = Boolean(
-    user?.email && 
-    process.env.NEXT_PUBLIC_ADMIN_EMAIL && 
-    user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL
-  )
+  const loadAdminRole = useCallback(async (userId: string | null | undefined) => {
+    if (!userId) {
+      setIsAdmin(false)
+      return
+    }
+
+    const { data, error } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', userId)
+      .single()
+
+    if (error) {
+      setIsAdmin(false)
+      return
+    }
+
+    setIsAdmin(data?.role === 'admin')
+  }, [supabase])
 
   useEffect(() => {
     // 초기 세션 확인
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      const nextUser = session?.user ?? null
+      setUser(nextUser)
+      await loadAdminRole(nextUser?.id)
       setLoading(false)
     })
 
     // 인증 상태 변경 감지
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      const nextUser = session?.user ?? null
+      setUser(nextUser)
+      await loadAdminRole(nextUser?.id)
     })
 
     return () => subscription.unsubscribe()
-  }, [])
+  }, [loadAdminRole, supabase])
 
   const signInWithGoogle = async () => {
     // 로그인 후 돌아올 경로를 localStorage에 저장
@@ -64,6 +82,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     // 먼저 user 상태 초기화
     setUser(null)
+    setIsAdmin(false)
     
     try {
       // scope: 'local'로 시도

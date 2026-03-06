@@ -294,4 +294,3 @@ export function useAdminList<T = any>(
   }
 }
 
-export type { UseAdminListConfig, UseAdminListReturn }

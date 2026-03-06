@@ -21,7 +21,7 @@ export async function GET(
     if (kitError) {
       console.error('Kit fetch error:', kitError)
       return NextResponse.json(
-        { error: 'Kit not found', details: kitError },
+        { error: 'Kit not found' },
         { status: 404 }
       )
     }
@@ -87,8 +87,8 @@ export async function GET(
         }
 
         // V1.9: ms_organizations 테이블을 통해 제조사/운용 조직 정보 가져오기
-        let manufacturerData = null
-        let operatorData = null
+        let manufacturerData: any = null
+        let operatorData: any = null
         
         const { data: msOrgs } = await supabase
           .from('ms_organizations')
@@ -113,7 +113,7 @@ export async function GET(
         }
 
         // V1.9: org_faction_memberships를 통해 진영 정보 가져오기 (운용 조직 기반)
-        let factionData = null
+        let factionData: any = null
         if (operatorData) {
           const { data: factionMembership } = await supabase
             .from('org_faction_memberships')
@@ -240,7 +240,7 @@ export async function GET(
   } catch (error) {
     console.error('Kit detail API error:', error)
     return NextResponse.json(
-      { error: 'Internal server error', details: error },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }

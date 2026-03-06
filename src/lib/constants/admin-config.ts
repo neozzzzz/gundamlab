@@ -66,6 +66,8 @@ export const ADMIN_STYLES = {
   input: 'w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-white text-gray-900',
   label: 'block text-sm font-medium text-gray-700 mb-1',
   required: 'text-red-500 ml-1',
+  sectionTitle: 'text-lg font-semibold text-gray-900 mb-4',
+  codeBadge: 'inline-flex items-center rounded bg-gray-100 px-2 py-1 font-mono text-xs text-gray-700',
   
   // 상태
   loadingText: 'text-center py-8 text-gray-500',
@@ -85,7 +87,7 @@ export const ADMIN_PAGES = {
     icon: '/icons/admin/box.svg',
     itemUnit: '킷',
     searchPlaceholder: '킷 이름 검색...',
-    color: { primary: '#3B82F6', bgSolid: '#3B82F6', text: 'text-blue-600', textHover: 'hover:text-blue-800' },
+    color: { primary: '#3B82F6', bgSolid: '#3B82F6', bgSolidHover: '#2563EB', text: 'text-blue-600', textHover: 'hover:text-blue-800', badge: 'bg-blue-100 text-blue-800' },
   },
   series: {
     title: '시리즈 관리',
@@ -95,7 +97,7 @@ export const ADMIN_PAGES = {
     icon: '/icons/admin/tv.svg',
     itemUnit: '시리즈',
     searchPlaceholder: '시리즈 이름 검색...',
-    color: { primary: '#10B981', bgSolid: '#10B981', text: 'text-green-600', textHover: 'hover:text-green-800' },
+    color: { primary: '#10B981', bgSolid: '#10B981', bgSolidHover: '#059669', text: 'text-green-600', textHover: 'hover:text-green-800', badge: 'bg-green-100 text-green-800' },
   },
   mobileSuits: {
     title: '모빌슈트 관리',
@@ -105,7 +107,7 @@ export const ADMIN_PAGES = {
     icon: '/icons/admin/robot.svg',
     itemUnit: 'MS',
     searchPlaceholder: '모빌슈트 이름, 형식번호 검색...',
-    color: { primary: '#8B5CF6', bgSolid: '#8B5CF6', text: 'text-purple-600', textHover: 'hover:text-purple-800' },
+    color: { primary: '#8B5CF6', bgSolid: '#8B5CF6', bgSolidHover: '#7C3AED', text: 'text-purple-600', textHover: 'hover:text-purple-800', badge: 'bg-purple-100 text-purple-800' },
   },
   pilots: {
     title: '파일럿 관리',
@@ -115,7 +117,7 @@ export const ADMIN_PAGES = {
     icon: '/icons/admin/user.svg',
     itemUnit: '파일럿',
     searchPlaceholder: '파일럿 이름 검색...',
-    color: { primary: '#F59E0B', bgSolid: '#F59E0B', text: 'text-amber-600', textHover: 'hover:text-amber-800' },
+    color: { primary: '#F59E0B', bgSolid: '#F59E0B', bgSolidHover: '#D97706', text: 'text-amber-600', textHover: 'hover:text-amber-800', badge: 'bg-amber-100 text-amber-800' },
   },
   factions: {
     title: '진영 관리',
@@ -125,7 +127,7 @@ export const ADMIN_PAGES = {
     icon: '/icons/admin/flag.svg',
     itemUnit: '진영',
     searchPlaceholder: '진영 이름 검색...',
-    color: { primary: '#EF4444', bgSolid: '#EF4444', text: 'text-red-600', textHover: 'hover:text-red-800' },
+    color: { primary: '#EF4444', bgSolid: '#EF4444', bgSolidHover: '#DC2626', text: 'text-red-600', textHover: 'hover:text-red-800', badge: 'bg-red-100 text-red-800' },
   },
   organizations: {
     title: '조직 관리',
@@ -135,7 +137,7 @@ export const ADMIN_PAGES = {
     icon: '/icons/admin/factory.svg',
     itemUnit: '조직',
     searchPlaceholder: '조직명 또는 ID 검색...',
-    color: { primary: '#8B5CF6', bgSolid: '#8B5CF6', text: 'text-purple-600', textHover: 'hover:text-purple-800' },
+    color: { primary: '#8B5CF6', bgSolid: '#8B5CF6', bgSolidHover: '#7C3AED', text: 'text-purple-600', textHover: 'hover:text-purple-800', badge: 'bg-purple-100 text-purple-800' },
   },
   // 레거시 호환용 (path 유지)
   companies: {
@@ -146,7 +148,7 @@ export const ADMIN_PAGES = {
     icon: '/icons/admin/factory.svg',
     itemUnit: '기업',
     searchPlaceholder: '기업 이름 검색...',
-    color: { primary: '#6366F1', bgSolid: '#6366F1', text: 'text-indigo-600', textHover: 'hover:text-indigo-800' },
+    color: { primary: '#6366F1', bgSolid: '#6366F1', bgSolidHover: '#4F46E5', text: 'text-indigo-600', textHover: 'hover:text-indigo-800', badge: 'bg-indigo-100 text-indigo-800' },
   },
 }
 
