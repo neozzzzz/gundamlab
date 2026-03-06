@@ -56,14 +56,14 @@ export function AuthButton() {
               className="w-8 h-8 rounded-full"
             />
           )}
-          <span className="text-sm text-foreground">
-            {user.user_metadata?.name || user.email}
-          </span>
           {isAdmin && (
             <Link href="/admin" className="px-3 py-1 text-xs font-medium bg-blue-600 hover:bg-blue-500 text-white rounded-full transition-colors">
               Dashboard
             </Link>
           )}
+          <span className="text-sm text-foreground">
+            {user.user_metadata?.name || user.email}
+          </span>
         </div>
 
         {/* 로그아웃 버튼 */}
