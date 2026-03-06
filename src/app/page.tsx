@@ -167,31 +167,16 @@ export default function HomePage() {
             <p className="text-sm mt-2">
               이 사이트는 비공식 팬 프로젝트입니다. 모든 건담 관련 저작권은 BANDAI NAMCO에 있습니다.
             </p>
-            {isAdmin && (
-              <a href="/admin" className="inline-block mt-3 text-xs text-zinc-600 hover:text-zinc-400 transition-colors">
-                관리자
-              </a>
-            )}
           </div>
+          {isAdmin && (
+            <div className="mt-4 pt-3 border-t border-zinc-800 text-center">
+              <a href="/admin" className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors">
+                관리자 대시보드 →
+              </a>
+            </div>
+          )}
         </div>
       </footer>
-
-      {/* 관리자 대시보드 링크 */}
-      {isAdmin && (
-        <div className="bg-zinc-900 border-t border-zinc-800">
-          <div className="max-w-7xl mx-auto px-4 py-3">
-            <div className="flex items-center justify-center gap-2">
-              <span className="text-xs text-zinc-500">관리자</span>
-              <Link 
-                href="/admin" 
-                className="text-sm text-blue-400 hover:text-blue-300 transition-colors font-medium"
-              >
-                대시보드 →
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* 준비중 모달 */}
       {showModal && (
