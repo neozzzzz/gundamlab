@@ -28,7 +28,7 @@ export function KitCard({ kit }: KitCardProps) {
               return (
                 <img
                   src={kit.box_art_url}
-                  alt={kit.name_ko}
+                  alt={kit.name_ko || ""}
                   className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                 />
               )
@@ -38,7 +38,7 @@ export function KitCard({ kit }: KitCardProps) {
               return (
                 <img
                   src={primaryImage.image_url}
-                  alt={kit.name_ko}
+                  alt={kit.name_ko || ""}
                   className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                 />
               )
@@ -59,7 +59,7 @@ export function KitCard({ kit }: KitCardProps) {
           {kit.limited_type && (
             <div 
               className="absolute top-2 right-2 text-white text-xs px-2 py-1 rounded-full font-bold"
-              style={{ backgroundColor: kit.limited_type.badge_color || '#DC2626' }}
+              style={{ backgroundColor: (kit.limited_type as any).badge_color || '#DC2626' }}
             >
               {kit.limited_type.name_ko}
             </div>
@@ -79,7 +79,7 @@ export function KitCard({ kit }: KitCardProps) {
             {kit.grade && (
               <div className="flex items-center gap-1.5">
                 <span className="px-2 py-1 bg-primary/10 text-primary rounded-md font-semibold">
-                  {kit.grade.code}
+                  {(kit.grade as any).code}
                 </span>
                 {kit.grade.scale && (
                   <span className="px-2 py-1 bg-secondary text-foreground rounded-md font-medium text-xs">

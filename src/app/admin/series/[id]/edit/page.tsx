@@ -27,18 +27,11 @@ export default function EditSeries() {
 
   useEffect(() => {
     const init = async () => {
-      await checkAuth()
       if (seriesId) await loadSeries()
     }
     init()
   }, [seriesId])
 
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session || session.user.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
-      router.push('/admin/login')
-    }
-  }
 
   const loadSeries = async () => {
     try {

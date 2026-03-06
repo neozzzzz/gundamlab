@@ -57,6 +57,52 @@ export async function POST(
       )
     }
 
+    // 승인된 경우, 실제 데이터 업데이트가 먼저 성공해야 함
+    if (status === 'approved') {
+      if (suggestion.suggestion_type === 'edit' && suggestion.kit_id) {
+        // 킷 정보 수정
+        const { error: kitUpdateError } = await supabase
+          .from('gundam_kits')
+          .update(suggestion.suggested_data as any)
+          .eq('id', suggestion.kit_id)
+
+        if (kitUpdateError) {
+          console.error('Kit update error:', kitUpdateError)
+          return NextResponse.json(
+            { error: 'Failed to apply approved suggestion' },
+            { status: 500 }
+          )
+        }
+      } else if (suggestion.suggestion_type === 'new') {
+        // 새 킷 추가
+        const { error: kitInsertError } = await supabase
+          .from('gundam_kits')
+          .insert(suggestion.suggested_data as any)
+
+        if (kitInsertError) {
+          console.error('Kit insert error:', kitInsertError)
+          return NextResponse.json(
+            { error: 'Failed to apply approved suggestion' },
+            { status: 500 }
+          )
+        }
+      } else if (suggestion.suggestion_type === 'delete' && suggestion.kit_id) {
+        // 킷 삭제 (상태 변경)
+        const { error: kitDeleteError } = await supabase
+          .from('gundam_kits')
+          .update({ status: 'discontinued' })
+          .eq('id', suggestion.kit_id)
+
+        if (kitDeleteError) {
+          console.error('Kit status update error:', kitDeleteError)
+          return NextResponse.json(
+            { error: 'Failed to apply approved suggestion' },
+            { status: 500 }
+          )
+        }
+      }
+    }
+
     // 제안 상태 업데이트
     const { error: updateError } = await supabase
       .from('suggestions')
@@ -69,33 +115,11 @@ export async function POST(
       .eq('id', id)
 
     if (updateError) {
-      console.error('Database error:', updateError)
+      console.error('Suggestion status update error:', updateError)
       return NextResponse.json(
-        { error: 'Failed to update suggestion' },
+        { error: 'Failed to finalize review' },
         { status: 500 }
       )
-    }
-
-    // 승인된 경우, 실제 데이터 업데이트
-    if (status === 'approved') {
-      if (suggestion.suggestion_type === 'edit' && suggestion.kit_id) {
-        // 킷 정보 수정
-        await supabase
-          .from('gundam_kits')
-          .update(suggestion.suggested_data as any)
-          .eq('id', suggestion.kit_id)
-      } else if (suggestion.suggestion_type === 'new') {
-        // 새 킷 추가
-        await supabase
-          .from('gundam_kits')
-          .insert(suggestion.suggested_data as any)
-      } else if (suggestion.suggestion_type === 'delete' && suggestion.kit_id) {
-        // 킷 삭제 (상태 변경)
-        await supabase
-          .from('gundam_kits')
-          .update({ status: 'discontinued' })
-          .eq('id', suggestion.kit_id)
-      }
     }
 
     return NextResponse.json({

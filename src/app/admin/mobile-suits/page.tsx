@@ -55,7 +55,6 @@ export default function MobileSuitsAdmin() {
   const [loadingKits, setLoadingKits] = useState(false)
 
   useEffect(() => {
-    checkAuth()
     loadSeries()
     loadKitCounts()
   }, [])
@@ -66,12 +65,6 @@ export default function MobileSuitsAdmin() {
     }
   }, [currentPage, searchTerm, seriesMap])
 
-  const checkAuth = async () => {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      router.push('/auth/login')
-    }
-  }
 
   const loadSeries = async () => {
     const { data } = await supabase.from('series').select('id, name_ko')

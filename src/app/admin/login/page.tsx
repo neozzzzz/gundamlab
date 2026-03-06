@@ -1,52 +1,12 @@
 'use client'
 
 import { createClient } from '@/lib/supabase/client'
-import { useEffect, useState, useRef } from 'react'
+import { useState } from 'react'
 
 export default function AdminLogin() {
   const supabase = createClient()
   const [loading, setLoading] = useState(false)
-  const [checking, setChecking] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const hasRedirected = useRef(false)
-
-  useEffect(() => {
-    // 이미 로그인된 관리자인지 확인
-    const checkExistingSession = async () => {
-      if (hasRedirected.current) return
-
-      // 리다이렉트 루프 감지
-      const redirectCount = parseInt(sessionStorage.getItem('admin_redirect_count') || '0')
-      if (redirectCount > 2) {
-        console.error('Redirect loop detected, stopping')
-        sessionStorage.removeItem('admin_redirect_count')
-        setChecking(false)
-        return
-      }
-      
-      try {
-        // getUser()가 getSession()보다 더 안정적
-        const { data: { user }, error } = await supabase.auth.getUser()
-        
-        if (!error && user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
-          if (!hasRedirected.current) {
-            hasRedirected.current = true
-            sessionStorage.setItem('admin_redirect_count', String(redirectCount + 1))
-            window.location.replace('/admin')
-            return
-          }
-        }
-      } catch (e) {
-        console.error('Session check error:', e)
-      }
-      
-      // 로그인 페이지에 정상 도착 - 카운터 리셋
-      sessionStorage.removeItem('admin_redirect_count')
-      setChecking(false)
-    }
-    
-    checkExistingSession()
-  }, [supabase])
 
   const handleGoogleLogin = async () => {
     try {
@@ -66,18 +26,6 @@ export default function AdminLogin() {
       setError('로그인 중 오류가 발생했습니다.')
       setLoading(false)
     }
-  }
-
-  // 세션 체크 중이면 로딩 표시
-  if (checking) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-sm text-gray-500">확인 중...</p>
-        </div>
-      </div>
-    )
   }
 
   return (

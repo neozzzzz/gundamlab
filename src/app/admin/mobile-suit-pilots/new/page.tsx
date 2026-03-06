@@ -45,16 +45,9 @@ export default function NewMobileSuitPilotPage() {
   })
 
   useEffect(() => {
-    checkAuth()
     fetchData()
   }, [])
 
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session || session.user.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
-      router.push('/admin/login')
-    }
-  }
 
   const fetchData = async () => {
     const { data: factionsData } = await supabase.from('factions').select('id, name_ko, color').order('name_ko')

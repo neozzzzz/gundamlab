@@ -28,18 +28,11 @@ export default function EditFaction() {
 
   useEffect(() => {
     const init = async () => {
-      await checkAuth()
       if (factionId) await loadFaction()
     }
     init()
   }, [factionId])
 
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session || session.user.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
-      router.push('/admin/login')
-    }
-  }
 
   const loadFaction = async () => {
     try {
@@ -47,14 +40,15 @@ export default function EditFaction() {
       const { data, error } = await supabase.from('factions').select('*').eq('id', factionId).single()
       if (error) throw error
 
-      if (data) {
+      const faction = data as any
+      if (faction) {
         setFormData({
-          name_ko: data.name_ko || '',
-          name_en: data.name_en || '',
-          universe: data.universe || '',
-          color: data.color || '#3B82F6',
-          description: data.description || '',
-          sort_order: data.sort_order?.toString() || '0',
+          name_ko: faction.name_ko || '',
+          name_en: faction.name_en || '',
+          universe: faction.universe || '',
+          color: faction.color || '#3B82F6',
+          description: faction.description || '',
+          sort_order: faction.sort_order?.toString() || '0',
         })
       }
     } catch (error: any) {
