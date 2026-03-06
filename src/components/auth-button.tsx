@@ -47,6 +47,12 @@ export function AuthButton() {
   if (user) {
     return (
       <div className="flex items-center gap-3">
+        {/* Dashboard 버튼 (관리자만) */}
+        {isAdmin && (
+          <Link href="/admin" className="hidden sm:inline-flex px-3 py-1 text-xs font-medium bg-blue-600 hover:bg-blue-500 text-white rounded-full transition-colors">
+            Dashboard
+          </Link>
+        )}
         {/* 사용자 프로필 */}
         <div className="hidden sm:flex items-center gap-2">
           {user.user_metadata?.avatar_url && (
@@ -55,11 +61,6 @@ export function AuthButton() {
               alt={user.user_metadata?.name || 'User'}
               className="w-8 h-8 rounded-full"
             />
-          )}
-          {isAdmin && (
-            <Link href="/admin" className="px-3 py-1 text-xs font-medium bg-blue-600 hover:bg-blue-500 text-white rounded-full transition-colors">
-              Dashboard
-            </Link>
           )}
           <span className="text-sm text-foreground">
             {user.user_metadata?.name || user.email}
