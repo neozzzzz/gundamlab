@@ -5,6 +5,8 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const supabase = await createClient()
@@ -76,15 +78,7 @@ export async function GET() {
       badge_color: '#DC2626'  // 기본 빨간색
     }))
 
-    // 디버깅용 로그
-    console.log('Filter API Response:', {
-      timelines: timelines?.length || 0,
-      grades: gradesWithCode?.length || 0,
-      series: series?.length || 0,
-      limitedTypes: limitedTypesWithColor?.length || 0,
-    })
-
-    return NextResponse.json({
+    const response = NextResponse.json({
       data: {
         timelines: timelines || [],
         grades: gradesWithCode,
@@ -93,6 +87,8 @@ export async function GET() {
       },
       error: null,
     })
+    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
+    return response
   } catch (error) {
     console.error('Filter API error:', error)
     return NextResponse.json(

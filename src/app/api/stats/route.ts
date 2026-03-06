@@ -4,49 +4,31 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const supabase = await createClient()
 
-    // 건담 킷 수
-    const { count: kitsCount, error: kitsError } = await supabase
-      .from('gundam_kits')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'active')
-      .is('deleted_at', null)
+    const [kitsResult, gradesResult, brandsResult, seriesResult] = await Promise.all([
+      supabase.from('gundam_kits').select('*', { count: 'exact', head: true }).eq('status', 'active').is('deleted_at', null),
+      supabase.from('grades').select('*', { count: 'exact', head: true }),
+      supabase.from('brands').select('*', { count: 'exact', head: true }),
+      supabase.from('series').select('*', { count: 'exact', head: true }),
+    ])
 
-    if (kitsError) throw kitsError
+    if (kitsResult.error) throw kitsResult.error
 
-    // 등급 수
-    const { count: gradesCount, error: gradesError } = await supabase
-      .from('grades')
-      .select('*', { count: 'exact', head: true })
+    const kits = kitsResult.count || 0
+    const grades = gradesResult.count || 0
+    const brands = brandsResult.count || 0
+    const series = seriesResult.count || 0
 
-    if (gradesError) throw gradesError
-
-    // 브랜드 수
-    const { count: brandsCount, error: brandsError } = await supabase
-      .from('brands')
-      .select('*', { count: 'exact', head: true })
-
-    if (brandsError) throw brandsError
-
-    // 시리즈 수
-    const { count: seriesCount, error: seriesError } = await supabase
-      .from('series')
-      .select('*', { count: 'exact', head: true })
-
-    if (seriesError) throw seriesError
-
-    return NextResponse.json({
-      data: {
-        kits: kitsCount || 0,
-        grades: gradesCount || 0,
-        brands: brandsCount || 0,
-        series: seriesCount || 0,
-        gradesBrands: (gradesCount || 0) + (brandsCount || 0)
-      }
+    const response = NextResponse.json({
+      data: { kits, grades, brands, series, gradesBrands: grades + brands }
     })
+    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
+    return response
   } catch (error) {
     console.error('Stats fetch error:', error)
     return NextResponse.json(
