@@ -163,10 +163,15 @@ export default function HomePage() {
       <footer className="border-t border-border mt-20">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="text-center text-muted-foreground">
-            <p>© 2024 GUNDAM ARCHIVE. Made with ❤️ for Gunpla fans.</p>
+            <p>© 2026 GUNDAM ARCHIVE. Made with ❤️ for Gunpla fans.</p>
             <p className="text-sm mt-2">
               이 사이트는 비공식 팬 프로젝트입니다. 모든 건담 관련 저작권은 BANDAI NAMCO에 있습니다.
             </p>
+            {isAdmin && (
+              <a href="/admin" className="inline-block mt-3 text-xs text-zinc-600 hover:text-zinc-400 transition-colors">
+                관리자
+              </a>
+            )}
           </div>
         </div>
       </footer>
