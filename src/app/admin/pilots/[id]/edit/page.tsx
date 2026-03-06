@@ -46,7 +46,6 @@ export default function EditPilot() {
 
   useEffect(() => {
     const init = async () => {
-      await checkAuth()
       await loadFactions()
       if (pilotId) {
         await loadPilot()
@@ -55,21 +54,6 @@ export default function EditPilot() {
     init()
   }, [pilotId])
 
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) {
-      alert('로그인이 필요합니다.')
-      router.push('/admin/login')
-      return
-    }
-    
-    if (session.user.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
-      alert('접근 권한이 없습니다.')
-      await supabase.auth.signOut()
-      router.push('/admin/login')
-      return
-    }
-  }
 
   const loadFactions = async () => {
     const { data } = await supabase

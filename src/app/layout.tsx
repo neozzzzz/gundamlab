@@ -2,15 +2,11 @@
 // 루트 레이아웃 - Threads 스타일 다크모드
 
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import { Providers } from '@/components/providers'
 import { GNB } from '@/components/gnb'
 import './globals.css'
 import { Analytics } from "@vercel/analytics/react"
 import GoogleAnalytics from '@/components/GoogleAnalytics'
-
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'GUNDAM ARCHIVE - 건담 아카이브',
@@ -28,7 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko" className="dark">
-      <body className={`${inter.className} bg-black text-white antialiased`}>
+      <body className="bg-black text-white antialiased">
         <Providers>
           <GNB />
           {children}

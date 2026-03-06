@@ -3,10 +3,9 @@
 // Next.js 15+ 호환 - @supabase/ssr 사용
 
 import { createBrowserClient } from '@supabase/ssr'
-import type { Database } from '@/lib/types/database'
 
 export const createClient = () => {
-  return createBrowserClient<Database>(
+  return createBrowserClient<any>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )

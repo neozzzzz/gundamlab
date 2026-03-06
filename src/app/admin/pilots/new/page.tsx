@@ -37,16 +37,9 @@ export default function AddPilot() {
   })
 
   useEffect(() => {
-    checkAuth()
     loadData()
   }, [])
 
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session || session.user.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
-      router.push('/admin/login')
-    }
-  }
 
   const loadData = async () => {
     try {

@@ -79,6 +79,19 @@ export const ADMIN_COLORS = {
     badge: 'bg-indigo-100 text-indigo-800',
     stat: 'text-indigo-600',
   },
+
+  // 조직 관리 - Purple
+  organizations: {
+    primary: 'purple',
+    text: 'text-purple-600',
+    textHover: 'hover:text-purple-800',
+    bg: 'bg-purple-100',
+    bgHover: 'hover:bg-purple-200',
+    bgSolid: 'bg-purple-600',
+    bgSolidHover: 'hover:bg-purple-700',
+    badge: 'bg-purple-100 text-purple-800',
+    stat: 'text-purple-600',
+  },
 } as const
 
 // 진영별 색상 (모빌슈트/파일럿 페이지에서 사용)
